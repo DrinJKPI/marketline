@@ -18,9 +18,13 @@ Built as the second Software Engineer Intern project for Tynoc Tech.
 | Hosting    | Vercel                                                   |
 | CI         | GitHub Actions: lint, type-check and build on every push |
 
+## Documentation
+
+- [Data model](docs/data-model.md): DynamoDB table design, access patterns and CRUD operations
+
 ## Roadmap
 
-- [ ] **Day 1 – Setup and planning:** tools, project setup, CI, DynamoDB connection, data model
+- [X] **Day 1 – Setup and planning:** tools, project setup, CI, DynamoDB connection, data model
 - [ ] **Day 2 – Database:** table creation script, repositories, seed data
 - [ ] **Day 3 – Storefront:** header and footer, homepage, category pages, product listing
 - [ ] **Day 4 – Products:** product detail, related products, search and filters
