@@ -51,11 +51,14 @@ Start [DynamoDB Local](https://docs.aws.amazon.com/amazondynamodb/latest/develop
 java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
 ```
 
-Then check the connection and start the app:
+Then check the connection, create the table, add the sample products and start the app:
 
 ```bash
 npm run db:ping
+npm run db:setup
+npm run db:seed
 npm run dev
+```run dev
 ```
 
 Open <http://localhost:3000>.
@@ -70,3 +73,6 @@ Open <http://localhost:3000>.
 | `npm run lint`      | Lint with ESLint                           |
 | `npm run typecheck` | Generate route types and run `tsc`         |
 | `npm run db:ping`   | Check the connection to DynamoDB           |
+| `npm run db:setup`  | Create the table and its indexes           |
+| `npm run db:seed`   | Add the sample categories and products     |
+| `npm run db:reset`  | Delete and recreate the local table        |

@@ -3,6 +3,7 @@
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
 import { getEnv } from "@/server/config/env";
 import { getDb } from "@/server/db/client";
+import { reportError } from "./lib/report-error";
 
 async function main() {
   const env = getEnv();
@@ -19,17 +20,8 @@ async function main() {
   if (TableNames.includes(tableName)) {
     console.log(`OK: table "${tableName}" exists.`);
   } else {
-    console.log(`Note: table "${tableName}" doesn't exist yet (created on Day 2).`);
+    console.log(`Note: table "${tableName}" doesn't exist yet. Run: npm run db:setup`);
   }
 }
 
-main().catch((error: unknown) => {
-  console.error("ERROR: the DynamoDB check failed.");
-  // Connection errors sometimes have an empty message but a useful code.
-  const code = (error as { code?: string } | null)?.code;
-  console.error(`  ${error instanceof Error ? error.message : String(error)}`);
-  if (code === "ECONNREFUSED") {
-    console.error("  Nothing is answering. Is DynamoDB Local running in its own window?");
-  }
-  process.exitCode = 1;
-});
+main().catch((error) => reportError("The DynamoDB check", error));

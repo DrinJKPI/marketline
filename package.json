@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "db:ping": "tsx --env-file=.env --conditions=react-server scripts/db-ping.ts"
+    "db:ping": "tsx --env-file=.env --conditions=react-server scripts/db-ping.ts",
+    "db:setup": "tsx --env-file=.env --conditions=react-server scripts/db-setup.ts",
+    "db:reset": "tsx --env-file=.env --conditions=react-server scripts/db-setup.ts --reset",
+    "db:seed": "tsx --env-file=.env --conditions=react-server scripts/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1162.0",
@@ -34,4 +37,5 @@
   "engines": {
     "node": ">=20.9"
   }
+
 }
