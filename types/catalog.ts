@@ -6,7 +6,7 @@ export type Category = {
   slug: string; // e.g. "electronics", also used in the URL
   name: string;
   description: string;
-  imageUrl: string;
+  imageUrl?: string; // optional: without one, the app shows an icon
   sortOrder: number; // position in menus, 1 = first
 };
 
@@ -18,7 +18,7 @@ export type Product = {
   categorySlug: string;
   priceCents: number; // whole cents: 7999 = 79.99
   compareAtPriceCents?: number; // the old price, only when on sale
-  images: string[]; // the first image is the main one
+  images: string[]; // the first is the main one; empty = show a placeholder
   rating: number; // average review score, 0 to 5
   reviewCount: number;
   stock: number; // 0 = out of stock
@@ -35,7 +35,7 @@ export type ProductSort =
   | "rating";
 
 // Everything a shopper can search and filter by. All fields are optional
-// except the sort order.
+// except the sort order
 export type ProductFilters = {
   query?: string;
   categorySlug?: string;
