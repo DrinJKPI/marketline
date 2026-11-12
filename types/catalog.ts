@@ -28,6 +28,7 @@ export type Product = {
 };
 
 export type ProductSort =
+  | "relevance" // best match for a search
   | "featured"
   | "newest"
   | "price-asc"
