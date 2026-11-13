@@ -17,6 +17,8 @@ Built as the second Software Engineer Intern project for Tynoc Tech.
 | Validation | zod                                                      |
 | Hosting    | Vercel                                                   |
 | CI         | GitHub Actions: lint, type-check and build on every push |
+| Tests      | Vitest: business-logic tests                             |
+| CI         | GitHub Actions: lint, type-check, test and build on every push |
 
 ## Documentation
 
@@ -26,13 +28,13 @@ Built as the second Software Engineer Intern project for Tynoc Tech.
 ## Roadmap
 
 - [X] **Day 1 – Setup and planning:** tools, project setup, CI, DynamoDB connection, data model
-- [ ] **Day 2 – Database:** table creation script, repositories, seed data
-- [ ] **Day 3 – Storefront:** header and footer, homepage, category pages, product listing
-- [ ] **Day 4 – Products:** product detail, related products, search and filters
-- [ ] **Day 5 – Accounts:** sign-up, login, sessions
-- [ ] **Day 6 – Cart:** guest and account carts, quantities, subtotal, merge on login
-- [ ] **Day 7 – Wishlist and states:** wishlist without duplicates; loading, empty, error and 404 pages
-- [ ] **Day 8 – Polish and deployment:** business-logic tests, real AWS table, Vercel
+- [X] **Day 2 – Database:** table creation script, repositories, seed data
+- [X] **Day 3 – Storefront:** header and footer, homepage, category pages, product listing
+- [X] **Day 4 – Products:** product detail, related products, search and filters
+- [X] **Day 5 – Accounts:** sign-up, login, sessions
+- [X] **Day 6 – Cart:** guest and account carts, quantities, subtotal, merge on login
+- [X] **Day 7 – Wishlist and states:** wishlist without duplicates; loading, empty, error and 404 pages
+- [X] **Day 8 – Polish and deployment:** business-logic tests, real AWS table, Vercel
 - [ ] **Day 9 – Final testing:** end-to-end checks, screenshots, documentation
 
 ## Run locally
@@ -77,3 +79,4 @@ Open <http://localhost:3000>.
 | `npm run db:setup`  | Create the table and its indexes           |
 | `npm run db:seed`   | Add the sample categories and products     |
 | `npm run db:reset`  | Delete and recreate the local table        |
+| `npm test`          | Run the automated tests (Vitest)           |
