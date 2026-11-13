@@ -14,9 +14,12 @@ import { ProductGrid } from "@/components/product-grid";
 import { ProductImage } from "@/components/product-image";
 import { Rating } from "@/components/rating";
 import { HeadingSkeleton, ProductGridSkeleton } from "@/components/skeletons";
+import { WishlistButton, WishlistButtonPlaceholder } from "@/components/wishlist-button";
 import { discountPercent, formatPrice } from "@/lib/utils/money";
 import { maxQuantityFor } from "@/server/services/cart";
 import { getProductPageData } from "@/server/services/catalog";
+import { getCurrentUser } from "@/server/services/session";
+import { isInWishlist } from "@/server/services/wishlist";
 import type { Product } from "@/types/catalog";
 
 const LOW_STOCK = 5;
@@ -97,7 +100,11 @@ async function ProductContent({ params }: { params: Promise<{ slug: string }> })
                     <StockStatus stock={product.stock} />
 
                     <AddToCart productSlug={product.slug} maxQuantity={maxQuantityFor(product)} />
-                    {/* The wishlist button comes here on Day 7. */}
+                    <div className="mt-3">
+                        <Suspense fallback={<WishlistButtonPlaceholder />}>
+                            <WishlistControl productSlug={product.slug} />
+                        </Suspense>
+                    </div>
 
                     <p className="mt-6 leading-relaxed text-slate-700">{product.description}</p>
 
@@ -144,6 +151,15 @@ async function ProductContent({ params }: { params: Promise<{ slug: string }> })
             )}
         </>
     );
+}
+
+// Checks who's logged in and whether they saved this product already.
+async function WishlistControl({ productSlug }: { productSlug: string }) {
+  const user = await getCurrentUser();
+  const saved = user ? await isInWishlist(user.id, productSlug) : false;
+  return (
+    <WishlistButton productSlug={productSlug} loggedIn={Boolean(user)} initialSaved={saved} />
+  );
 }
 
 function StockStatus({ stock }: { stock: number }) {

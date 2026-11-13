@@ -3,6 +3,7 @@
 // <Suspense>, with the plain link as a placeholder.
 
 import Link from "next/link";
+import { unstable_rethrow } from "next/navigation";
 import { User } from "lucide-react";
 import { getCurrentUser } from "@/server/services/session";
 
@@ -10,7 +11,13 @@ const className =
   "flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium hover:bg-white/10";
 
 export async function AccountLink() {
-  const user = await getCurrentUser();
+  let user;
+  try {
+    user = await getCurrentUser();
+  } catch (error) {
+    unstable_rethrow(error); // let Next.js's own signals through
+    console.error("Couldn't check the session:", error);
+  }
   if (!user) return <AccountLinkFallback />;
 
   const firstName = user.name.split(" ")[0];
