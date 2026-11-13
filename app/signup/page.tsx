@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { AuthForm } from "@/components/auth-form";
+import { AuthFormSkeleton } from "@/components/skeletons";
 import { safeNextPath } from "@/lib/utils/safe-redirect";
 import { getCurrentUser } from "@/server/services/session";
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = { title: "Create an account" };
 
 export default function SignUpPage({ searchParams }: PageProps<"/signup">) {
   return (
-    <Suspense fallback={<AuthForm mode="signup" />}>
+    <Suspense fallback={<AuthFormSkeleton />}>
       <SignUpForm searchParams={searchParams} />
     </Suspense>
   );

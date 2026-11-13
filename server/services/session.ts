@@ -5,6 +5,7 @@ import "server-only";
 import { createHash, randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { cache } from "react";
 import { deleteSession, getSession, putSession } from "@/server/db/sessions";
 import { getUserById } from "@/server/db/users";
@@ -41,6 +42,12 @@ export async function startSession(userId: string): Promise<void> {
 export const getCurrentUser = cache(async (): Promise<User | null> => {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
+
+  // Next.js may render pages ahead of time with the visitor's cookies (to
+  // prefetch them). connection() makes it wait for a real request before we
+  // read the database: the AWS SDK gives every request a random ID, which
+  // must not be "baked into" an early render.
+  await connection();
 
   const session = await getSession(hashToken(token));
   // DynamoDB removes expired sessions by itself, but not instantly, so

@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { AuthForm } from "@/components/auth-form";
+import { AuthFormSkeleton } from "@/components/skeletons";
 import { safeNextPath } from "@/lib/utils/safe-redirect";
 import { getCurrentUser } from "@/server/services/session";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = { title: "Log in" };
 
 export default function LoginPage({ searchParams }: PageProps<"/login">) {
   return (
-    <Suspense fallback={<AuthForm mode="login" />}>
+    <Suspense fallback={<AuthFormSkeleton />}>
       <LoginForm searchParams={searchParams} />
     </Suspense>
   );

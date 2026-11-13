@@ -42,3 +42,20 @@ export function HeadingSkeleton() {
     </div>
   );
 }
+
+export function AuthFormSkeleton() {
+  return (
+    <div aria-hidden className="mx-auto w-full max-w-sm animate-pulse px-4 py-12">
+      <div className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="h-6 w-2/3 rounded bg-slate-100" />
+        {[1, 2, 3].map((n) => (
+          <div key={n} className="space-y-2">
+            <div className="h-3 w-1/4 rounded bg-slate-100" />
+            <div className="h-9 rounded-lg bg-slate-100" />
+          </div>
+        ))}
+        <div className="h-10 rounded-lg bg-slate-100" />
+      </div>
+    </div>
+  );
+}
