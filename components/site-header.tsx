@@ -3,13 +3,13 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
-import { Heart, ShoppingBag, ShoppingCart, User } from "lucide-react";
+import { Heart, ShoppingBag, ShoppingCart } from "lucide-react";
+import { AccountLink, AccountLinkFallback } from "@/components/account-link";
 import { CategoryNav } from "@/components/category-nav";
 import { SearchBox, SearchForm } from "@/components/search-box";
 import { CategoryNavSkeleton } from "@/components/skeletons";
 
 const iconLinks = [
-  { href: "/login", label: "Account", icon: User },
   { href: "/wishlist", label: "Wishlist", icon: Heart },
   { href: "/cart", label: "Cart", icon: ShoppingCart },
 ];
@@ -29,6 +29,9 @@ export function SiteHeader() {
           </Suspense>
 
           <nav aria-label="Your account" className="ml-auto flex items-center gap-1 sm:ml-0">
+            <Suspense fallback={<AccountLinkFallback />}>
+              <AccountLink />
+            </Suspense>
             {iconLinks.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
