@@ -8,6 +8,7 @@ import { z } from "zod";
 import { safeNextPath } from "@/lib/utils/safe-redirect";
 import { logInSchema, signUpSchema, type AuthState } from "@/lib/validation/auth";
 import { EmailTakenError, createUser, findUserForLogin } from "@/server/db/users";
+import { mergeGuestCart } from "@/server/services/cart";
 import { endSession, startSession } from "@/server/services/session";
 
 // bcrypt's cost factor: each +1 doubles the work. 12 takes a few hundred
@@ -44,6 +45,7 @@ export async function signUp(
       passwordHash: await bcrypt.hash(password, BCRYPT_ROUNDS),
     });
     await startSession(user.id);
+    await keepGuestCart(user.id);
   } catch (error) {
     if (error instanceof EmailTakenError) {
       return { errors: { email: [error.message] }, values };
@@ -78,10 +80,21 @@ export async function logIn(
   }
 
   await startSession(found.user.id);
+  await keepGuestCart(found.user.id);
   redirect(safeNextPath(formData.get("next")));
 }
 
 export async function logOut(): Promise<void> {
   await endSession();
   redirect("/");
+}
+
+// Whatever a guest put in their cart moves into their account's cart. If
+// that fails, logging in still works: the guest cart just stays behind.
+async function keepGuestCart(userId: string): Promise<void> {
+  try {
+    await mergeGuestCart(userId);
+  } catch (error) {
+    console.error("Couldn't merge the guest cart:", error);
+  }
 }

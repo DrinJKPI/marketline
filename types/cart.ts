@@ -19,6 +19,7 @@ export type CartItem = {
 export type CartLine = CartItem & {
   product: Product;
   lineTotalCents: number; // price × quantity
+  maxQuantity: number; // the most you can have: the per-item limit or the stock
 };
 
 export type Cart = {

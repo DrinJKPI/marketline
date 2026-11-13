@@ -7,6 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense, cache } from "react";
 import { CircleCheck, CircleX, TriangleAlert } from "lucide-react";
+import { AddToCart } from "@/components/add-to-cart";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Price } from "@/components/price";
 import { ProductGrid } from "@/components/product-grid";
@@ -14,6 +15,7 @@ import { ProductImage } from "@/components/product-image";
 import { Rating } from "@/components/rating";
 import { HeadingSkeleton, ProductGridSkeleton } from "@/components/skeletons";
 import { discountPercent, formatPrice } from "@/lib/utils/money";
+import { maxQuantityFor } from "@/server/services/cart";
 import { getProductPageData } from "@/server/services/catalog";
 import type { Product } from "@/types/catalog";
 
@@ -94,7 +96,8 @@ async function ProductContent({ params }: { params: Promise<{ slug: string }> })
 
                     <StockStatus stock={product.stock} />
 
-                    {/* The "Add to cart" and wishlist buttons come here on Days 6 and 7. */}
+                    <AddToCart productSlug={product.slug} maxQuantity={maxQuantityFor(product)} />
+                    {/* The wishlist button comes here on Day 7. */}
 
                     <p className="mt-6 leading-relaxed text-slate-700">{product.description}</p>
 

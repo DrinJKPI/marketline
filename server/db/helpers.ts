@@ -1,10 +1,12 @@
 // Small helpers for DynamoDB operations that need more than one request.
-import "server-only";
 import {
   BatchGetCommand,
+  BatchWriteCommand,
   QueryCommand,
   type BatchGetCommandInput,
   type BatchGetCommandOutput,
+  type BatchWriteCommandInput,
+  type BatchWriteCommandOutput,
   type QueryCommandInput,
 } from "@aws-sdk/lib-dynamodb";
 import { getDb } from "@/server/db/client";
@@ -72,4 +74,34 @@ export async function batchGetAll(
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const WRITE_BATCH_SIZE = 25; // the most items one BatchWriteItem accepts
+
+// Deletes many items by key, 25 per request, retrying any that DynamoDB
+// was too busy to handle ("UnprocessedItems").
+export async function batchDeleteAll(
+  itemKeys: { PK: string; SK: string }[],
+): Promise<void> {
+  const { doc, tableName } = getDb();
+
+  for (let start = 0; start < itemKeys.length; start += WRITE_BATCH_SIZE) {
+    let request: BatchWriteCommandInput["RequestItems"] = {
+      [tableName]: itemKeys
+        .slice(start, start + WRITE_BATCH_SIZE)
+        .map((Key) => ({ DeleteRequest: { Key } })),
+    };
+
+    for (let attempt = 1; request && Object.keys(request).length > 0; attempt++) {
+      if (attempt > MAX_ATTEMPTS) {
+        throw new Error("DynamoDB is too busy: some items could not be deleted.");
+      }
+      if (attempt > 1) await sleep(50 * 2 ** attempt);
+
+      const result: BatchWriteCommandOutput = await doc.send(
+        new BatchWriteCommand({ RequestItems: request }),
+      );
+      request = result.UnprocessedItems;
+    }
+  }
 }

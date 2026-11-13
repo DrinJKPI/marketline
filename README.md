@@ -20,6 +20,7 @@ Built as the second Software Engineer Intern project for Tynoc Tech.
 
 ## Documentation
 
+- [Cart API](docs/api.md): the cart's REST endpoints, errors and rules
 - [Data model](docs/data-model.md): DynamoDB table design, access patterns and CRUD operations
 
 ## Roadmap

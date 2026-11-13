@@ -3,16 +3,12 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
-import { Heart, ShoppingBag, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingBag } from "lucide-react";
 import { AccountLink, AccountLinkFallback } from "@/components/account-link";
+import { CartLink, CartLinkFallback } from "@/components/cart-link";
 import { CategoryNav } from "@/components/category-nav";
 import { SearchBox, SearchForm } from "@/components/search-box";
 import { CategoryNavSkeleton } from "@/components/skeletons";
-
-const iconLinks = [
-  { href: "/wishlist", label: "Wishlist", icon: Heart },
-  { href: "/cart", label: "Cart", icon: ShoppingCart },
-];
 
 export function SiteHeader() {
   return (
@@ -32,17 +28,17 @@ export function SiteHeader() {
             <Suspense fallback={<AccountLinkFallback />}>
               <AccountLink />
             </Suspense>
-            {iconLinks.map(({ href, label, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                aria-label={label}
-                className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium hover:bg-white/10"
-              >
-                <Icon aria-hidden className="h-5 w-5" />
-                <span className="hidden md:inline">{label}</span>
-              </Link>
-            ))}
+            <Link
+              href="/wishlist"
+              aria-label="Wishlist"
+              className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium hover:bg-white/10"
+            >
+              <Heart aria-hidden className="h-5 w-5" />
+              <span className="hidden md:inline">Wishlist</span>
+            </Link>
+            <Suspense fallback={<CartLinkFallback />}>
+              <CartLink />
+            </Suspense>
           </nav>
         </div>
       </div>
